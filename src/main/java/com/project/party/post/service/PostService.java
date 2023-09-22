@@ -18,7 +18,7 @@ public interface PostService {
     void deletePost(int postId);
 
     //전체 게시글 + 좋아요 목록
-    Map<String, Object> getListWithLikes(String keyword, String condition, Integer userNum, int pageNum, int pageSize);
+    List<PostDto> getListWithLikes(String keyword, String condition, Integer userNum);
 
     //하나의 게시글을 조회
     PostDto getDetail(int postId);

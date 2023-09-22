@@ -28,9 +28,4 @@ public class PostDto {
     private String userEmail;  //글 작성자 이메일
     private String userProfile;  //글 작성자 프로필
 
-    private int startRowNum; //시작 행 번호
-    private int pageSize; // 페이지당 게시물 수
-    private int startPageNum; //시작 페이지 번호
-    private int endPageNum; //끝 페이지 번호
-    private int totalPageCount; //총 페이지 수
 }

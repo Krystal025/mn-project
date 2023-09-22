@@ -96,22 +96,9 @@ public class BoardServiceImpl implements BoardService {
 
     //게시글 목록 + 좋아요 조회 메소드
     @Override
-    public Map<String, Object> getListWithLikes(String keyword, String condition, Integer userNum, int pageNum, int pageSize) {
+    public List<BoardDto> getListWithLikes(String keyword, String condition, Integer userNum) {
         BoardDto dto = new BoardDto();
         dto.setUserNum(userNum);
-        int PAGE_DISPLAY_COUNT = 5;
-        int startPageNum = 1 + ((pageNum - 1) / PAGE_DISPLAY_COUNT) * PAGE_DISPLAY_COUNT;
-        int endPageNum = startPageNum + PAGE_DISPLAY_COUNT - 1;
-        int totalRow = rcpMapper.getTotalCount(dto);
-        int totalPageCount = (int) Math.ceil(totalRow / (double) pageSize);
-        if (endPageNum > totalPageCount) {
-            endPageNum = totalPageCount;
-        }
-        dto.setStartPageNum(startPageNum);
-        dto.setEndPageNum(endPageNum);
-        dto.setTotalPageCount(totalPageCount);
-        dto.setPageSize(pageSize);
-        dto.setStartRowNum((pageNum - 1) * pageSize);
         //keyword가 있을 경우 검사
         if (keyword != null && !"".equals(keyword)) {
             //검색조건이 "제목"인 경우
@@ -120,22 +107,16 @@ public class BoardServiceImpl implements BoardService {
                 dto.setTitle(keyword);
             }
         }
-        List<BoardDto> rcpList = new ArrayList<>();
-        if(userNum == null){
+        List<BoardDto> rcpList;
+        if (userNum == null) {
             rcpList = rcpMapper.getList(dto);
-        }else{
+        } else {
             rcpList = rcpMapper.getListWithLikes(dto);
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("contents", rcpList);
-        map.put("startPageNum", startPageNum);
-        map.put("endPageNum", endPageNum);
-        map.put("totalPageCount", totalPageCount);
-        map.put("totalRow", totalRow);
-        return map;
+        return rcpList;
     }
 
-    //게시글 상세 조회
+        //게시글 상세 조회
     @Override
     public BoardDto getDetail(int rcpNum) {
         //게시글 상세정보 조회

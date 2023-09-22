@@ -57,13 +57,11 @@ public class PostController {
 
     //게시글 목록 조회
     @GetMapping("/list")
-    public Map<String, Object> getList(@RequestParam(name = "keyword", required = false) String keyword,
-                                                 @RequestParam(name = "condition", required = false) String condition,
-                                                 @RequestParam(required = false) Integer userNum,
-                                                 @RequestParam(defaultValue = "1") int pageNum,
-                                                 @RequestParam(defaultValue = "6") int pageSize) {
-        Map<String, Object> map = postService.getListWithLikes(keyword, condition, userNum, pageNum, pageSize);
-        return map;
+    public List<PostDto> getList(@RequestParam(name = "keyword", required = false) String keyword,
+                                 @RequestParam(name = "condition", required = false) String condition,
+                                 @RequestParam(required = false) Integer userNum) {
+        List<PostDto> postList = postService.getListWithLikes(keyword, condition, userNum);
+        return postList;
     }
 
     //게시글 상세 조회

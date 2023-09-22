@@ -19,9 +19,6 @@ public interface PostMapper {
     //전체 글 + 좋아요 조회
     List<PostDto> getListWithLikes(PostDto dto);
 
-    //전체 게시글 수 조회
-    int getTotalCount(PostDto dto);
-
     //하나의 글을 조회
     PostDto getDetail(int post_id);
 

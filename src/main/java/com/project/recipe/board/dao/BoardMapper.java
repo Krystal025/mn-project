@@ -22,9 +22,6 @@ public interface BoardMapper {
     //글 목록 + 좋아요 조회
     List<BoardDto> getListWithLikes(BoardDto dto);
 
-    //전체 게시글 수 조회
-    int getTotalCount(BoardDto dto);
-
     //글 상세 조회
     BoardDto getDetail(int rcpNum);
 

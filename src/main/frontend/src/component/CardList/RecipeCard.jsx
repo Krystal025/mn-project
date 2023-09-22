@@ -12,11 +12,6 @@ const RecipeCard = ({ card, showTitle, showLikeBox }) => {
     const [rcpNum, setRcpNum] = useState(card.rcpNum);
     const [isLikedByUser, setIsLikedByUser] = useState(0);
 
-
-    const [pageInfo, setPageInfo]=useState({
-        contents:[]
-    });
-
     useEffect(() => {
         const newToken = localStorage.getItem('login-token');
         if (newToken) {
@@ -24,51 +19,42 @@ const RecipeCard = ({ card, showTitle, showLikeBox }) => {
             if (decodedToken && decodedToken.userNum) {
                 setUserNum(decodedToken.userNum);
             } else {
-
+                console.error("userNum 없음");
             }
         } else {
             // 토큰이 없는 경우에 대한 처리
         }
     }, []);
 
-    const checkLikeStatus = async () => {
+    const checkLikeStatus = async() => {
+       // setIsLikedByUser((prevIsLiked) => !prevIsLiked);
         if (userNum) {
             try {
                 const response = await axios.get(`http://localhost:9999/recipe/list?userNum=${userNum}`);
-                const data = response.data;
-                setPageInfo(data);
-                // 아래에 콘솔 로그 추가
-                console.log("Data from the server:", data);
+                const party = response.data.find(item => item.rcpNum === card.rcpNum);
 
-                const recipe = data.contents.find(item => item.rcpNum === card.rcpNum);
-
-                // 아래에 콘솔 로그 추가
-                console.log("Recipe object:", recipe);
-
-                if (recipe) {
-                    const liked = recipe.liked;
-
-                    // 아래에 콘솔 로그 추가
-                    console.log("Liked value:", liked);
-
-                    setIsLikedByUser(liked === 1);
+                        const recipe = response.data.find(item => item.rcpNum === card.rcpNum);  // rcpNum이 일치하는 객체 찾기
+                        if (recipe) {
+                            const liked = recipe.liked;  // 찾은 객체에서 'liked' 값만 추출
+                            setIsLikedByUser(liked === 1);  // liked 값이 1인지 확인하여 상태 설정
+                            //console.log("좋아요: ", recipe.liked)
+                        }
+                } catch (error) {
+                    console.error('좋아요 상태 가져오기 실패:', error);
                 }
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            } else {
+                setIsLikedByUser(false);
             }
-        } else {
-            setIsLikedByUser(false);
-        }
-    };
+        };
 
     useEffect(() => {
         const fetchData = async () => {
             await checkLikeStatus(false);
             // 여기에서 페이지 전환을 수행하거나, 페이지 변경에 따른 로직을 추가할 수 있음
         };
+
         fetchData();
     }, [userNum, card.rcpNum]);
-
 
     const handleToggleLike = () => {
         if (!userNum) {
@@ -102,22 +88,16 @@ const RecipeCard = ({ card, showTitle, showLikeBox }) => {
                     console.error('좋아요 토글 요청 실패:', error);
                     // 좀 더 자세한 오류 정보를 클라이언트에 표시하려면 다음과 같이 수정합니다.
                     if (error.response) {
-
-                    }else {
-
+                        console.error('서버 응답 상태 코드:', error.response.status);
+                        // 500번오류일때 뜨게 하기alert("로그인을 하셨나요?")
+                        console.error('서버 응답 데이터:', error.response.data);
+                    } else if (error.request) {
+                        console.error('서버 응답 없음');
+                    } else {
+                        console.error('요청 전 오류:', error.message);
                     }
                 });
         }
-
-        // 캐시 초기화 예제
-        const cache = {};
-
-        const clearCache = () => {
-            for (const key in cache) {
-                delete cache[key];
-            }
-        };
-
     };
 
     return (

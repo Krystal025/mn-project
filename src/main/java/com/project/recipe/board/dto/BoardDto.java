@@ -38,10 +38,4 @@ public class BoardDto {
     private List<SubImgDto> subImgs; //서브 이미지들
     private int[] subNums; //서브 이미지 번호들 (삭제할 때 사용)
 
-    private int startRowNum; // 시작 행 번호
-    private int pageSize; // 페이지당 게시물 수
-    private int startPageNum;
-    private int endPageNum;
-    private int totalPageCount;
-
 }

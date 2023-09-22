@@ -36,27 +36,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public  Map<String, Object> getListWithLikes(String keyword, String condition, Integer userNum, int pageNum, int pageSize) {
+    public  List<PostDto> getListWithLikes(String keyword, String condition, Integer userNum) {
         PostDto dto = new PostDto();
         dto.setUserNum(userNum);
-
-        int PAGE_DISPLAY_COUNT = 5;
-        int startPageNum = 1 + ((pageNum - 1) / PAGE_DISPLAY_COUNT) * PAGE_DISPLAY_COUNT;
-        int endPageNum = startPageNum + PAGE_DISPLAY_COUNT - 1;
-        // 전체 row 수를 얻어야 합니다. 이 부분을 완성해야 함.
-        int totalRow = postMapper.getTotalCount(dto);
-
-        int totalPageCount = (int) Math.ceil(totalRow / (double) pageSize);
-
-        if (endPageNum > totalPageCount) {
-            endPageNum = totalPageCount;
-        }
-        dto.setStartPageNum(startPageNum);
-        dto.setEndPageNum(endPageNum);
-        dto.setTotalPageCount(totalPageCount);
-        dto.setPageSize(pageSize);
-        dto.setStartRowNum((pageNum - 1) * pageSize);
-
         if (keyword != null && !"".equals(keyword)) {
             if ("userNickname".equals(condition)) {
                 dto.setUserNickname(keyword);
@@ -68,16 +50,8 @@ public class PostServiceImpl implements PostService {
         }else{
             postList = postMapper.getListWithLikes(dto);
         }
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("contents", postList);
-        map.put("startPageNum", startPageNum);
-        map.put("endPageNum", endPageNum);
-        map.put("totalPageCount", totalPageCount);
-        map.put("totalRow", totalRow);
-        return map;
+        return postList;
     }
-
 
     @Override
     public PostDto getDetail(int postId) {

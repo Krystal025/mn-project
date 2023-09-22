@@ -31,9 +31,8 @@
         FROM party_post p
         JOIN user u ON p.user_num = u.user_num
         LEFT JOIN party_image i ON p.post_id = i.post_id
-        ORDER BY p.post_id DESC
         <include refid="searchCondition"/>
-        LIMIT #{pageSize} OFFSET #{startRowNum}
+        ORDER BY p.post_id DESC
     </select>
 
     <!--게시글 & 메인 이미지 목록 조회 & 좋아요 여부-->
@@ -44,9 +43,8 @@
         FROM party_post p
         JOIN user u ON p.user_num = u.user_num
         LEFT JOIN party_image i ON p.post_id = i.post_id
-        ORDER BY p.post_id DESC
         <include refid="searchCondition"/>
-        LIMIT #{pageSize} OFFSET #{startRowNum}
+        ORDER BY p.post_id DESC
     </select>
 
     <!-- 게시글 상세 조회 -->

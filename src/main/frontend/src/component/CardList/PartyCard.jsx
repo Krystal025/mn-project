@@ -10,14 +10,6 @@ const PartyCard = ({ card, showTitle, showLikeBox }) => {
     const [userNum, setUserNum] = useState(0);
     const [postId, setPostId] = useState(card.postId);
     const [isLikedByUser, setIsLikedByUser] = useState(0);
-    //console.log("초기상태 isLikedByUser 상태 : " , isLikedByUser);
-    //console.log("postId: ", card.postId); // card.rcpNum 값 확인
-    //console.log("userNum: ", userNum); // userNum 값 확인
-
-
-    const [pageInfo, setPageInfo]=useState({
-        contents:[]
-    });
 
     useEffect(() => {
         const newToken = localStorage.getItem('login-token');
@@ -38,12 +30,7 @@ const PartyCard = ({ card, showTitle, showLikeBox }) => {
         if (userNum) {
             try {
                 const response = await axios.get(`http://localhost:9999/party/list?userNum=${userNum}`);
-                const data = response.data;
-                setPageInfo(data);
-
-                const party = data.contents.find(item => item.postId === card.postId);
-
-
+                const party = response.data.find(item => item.postId === card.postId);
                 if (party) {
                     const liked = party.liked;
                     setIsLikedByUser(liked === 1);
@@ -97,7 +84,11 @@ const PartyCard = ({ card, showTitle, showLikeBox }) => {
                 console.error('좋아요 토글 요청 실패:', error);
                 // 좀 더 자세한 오류 정보를 클라이언트에 표시하려면 다음과 같이 수정합니다.
                 if (error.response) {
-
+                    console.error('서버 응답 상태 코드:', error.response.status);
+                    // 500번오류일때 뜨게 하기alert("로그인을 하셨나요?")
+                    console.error('서버 응답 데이터:', error.response.data);
+                } else if (error.request) {
+                    console.error('서버 응답 없음');
                 } else {
                     console.error('요청 전 오류:', error.message);
                 }

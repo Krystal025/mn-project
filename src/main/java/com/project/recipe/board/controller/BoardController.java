@@ -93,13 +93,11 @@ public class BoardController {
 
     //전체 게시글 목록
     @GetMapping("/list")
-    public Map<String, Object> getList(@RequestParam(name = "keyword", required = false) String keyword,
-                                       @RequestParam(name = "condition", required = false) String condition,
-                                       @RequestParam(required = false) Integer userNum,
-                                       @RequestParam(defaultValue = "1") int pageNum,
-                                       @RequestParam(defaultValue = "6") int pageSize) {
-        Map<String, Object> map = rcpService.getListWithLikes(keyword, condition, userNum, pageNum, pageSize);
-        return map;
+    public List<BoardDto> getList(@RequestParam(name = "keyword", required = false) String keyword,
+                                  @RequestParam(name = "condition", required = false) String condition,
+                                  @RequestParam(required = false) Integer userNum) {
+        List<BoardDto> rcpList = rcpService.getListWithLikes(keyword, condition, userNum);
+        return rcpList;
     }
 
     //게시글 상세
